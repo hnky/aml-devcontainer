@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "name": {
+            "defaultValue": "devcontainer",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2021-03-01",
+            "name": "[parameters('name')]",
+            "location": "westeurope",
+            "properties": {
+                "sku": "Standard",
+                "containers": [
+                    {
+                        "name": "[parameters('name')]",
+                        "properties": {
+                            "image": "hboelman/devcontainer:latest",
+                            "ports": [
+                                {
+                                    "protocol": "TCP",
+                                    "port": 80
+                                },
+                                {
+                                    "protocol": "TCP",
+                                    "port": 22
+                                }
+                            ],
+                            "environmentVariables": [],
+                            "resources": {
+                                "requests": {
+                                    "memoryInGB": 4,
+                                    "cpu": 2
+                                }
+                            }
+                        }
+                    }
+                ],
+                "initContainers": [],
+                "restartPolicy": "OnFailure",
+                "ipAddress": {
+                    "ports": [
+                        {
+                            "protocol": "TCP",
+                            "port": 80
+                        },
+                        {
+                            "protocol": "TCP",
+                            "port": 22
+                        }
+                    ],
+                    "type": "Public"
+                },
+                "osType": "Linux"
+            }
+        }
+    ]
+}
